@@ -1,0 +1,101 @@
+{
+  "_meta": {
+    "name": "c4_rubric",
+    "version": "1.0",
+    "source": "改编自平台 c4a-skill-evaluator-starter/references/c4_rubric.yaml",
+    "note": "纯规则评审的信号字典。每个必交文件与质量维度都有一组文件名模式与内容信号；min_positive 是判定✅达标所需的最小正向信号命中数。"
+  },
+  "required_deliverables": {
+    "skill_doc": {
+      "label_cn": "Skill 说明文档",
+      "label_en": "Skill Description Document",
+      "filename_patterns": ["skill说明", "skill_doc", "skill-doc", "skill_description", "技能说明"],
+      "content_signals": ["使用场景", "输入", "输出", "解决什么问题", "use case", "input", "output"],
+      "extensions": [".md", ".pdf", ".docx"]
+    },
+    "executable_content": {
+      "label_cn": "可执行内容",
+      "label_en": "Executable Skill Content",
+      "filename_patterns": ["技能", "skill", "预检器", "evaluator", "脚本"],
+      "content_signals": ["```", "def ", "class ", "import ", "name:", "workflow"],
+      "extensions": [".skill", ".py", ".md", ".zip"]
+    },
+    "demo": {
+      "label_cn": "Demo（视频/截图）",
+      "label_en": "Demo (video/screenshot)",
+      "filename_patterns": ["demo", "演示", "截图", "screen", "录屏"],
+      "content_signals": [],
+      "extensions": [".mp4", ".mov", ".webm", ".png", ".jpg", ".jpeg", ".gif"]
+    },
+    "teaching_doc": {
+      "label_cn": "教学说明",
+      "label_en": "Teaching Instructions",
+      "filename_patterns": ["教学说明", "教学", "tutorial", "teaching", "上手指南", "quickstart", "how-to"],
+      "content_signals": ["上手", "步骤", "常见坑", "安装", "注意事项", "getting started", "step by step"],
+      "extensions": [".md", ".pdf", ".docx"]
+    },
+    "ai_log": {
+      "label_cn": "AI 生成日志",
+      "label_en": "AI Usage Log",
+      "filename_patterns": ["AI日志", "AI_log", "ai-log", "ai_日志"],
+      "content_signals": ["使用的 AI", "AI 工具", "prompt", "迭代次数", "迭代", "ChatGPT", "Claude", "DeepSeek"],
+      "extensions": [".md", ".pdf", ".docx"]
+    }
+  },
+  "quality_criteria": {
+    "reusable": {
+      "label_cn": "可复用",
+      "label_en": "Reusable",
+      "weight": 0.25,
+      "min_positive": 2,
+      "positive_signals": ["安装", "install", "环境要求", "requirements", "dependencies", "pip install", "npm install", "兼容", "compatible", "跨平台", "stdin", "stdout"],
+      "negative_signals": ["/Users/", "/home/", "C:\\", "我的电脑", "my_secret", "api_key =", "password =", "secret ="],
+      "check_items": ["有安装说明", "无硬编码绝对路径", "列出环境要求", "平台无关或注明平台"]
+    },
+    "executable": {
+      "label_cn": "可执行",
+      "label_en": "Executable",
+      "weight": 0.25,
+      "min_positive": 1,
+      "positive_signals": ["```python", "```bash", "```javascript", "def ", "class ", "import ", "name:", "workflow", "pipeline", "if __name__"],
+      "negative_signals": [],
+      "check_items": ["含可运行代码/prompt/workflow", ".skill 包结构有效", "无明显语法错误", "SKILL.md 含 YAML frontmatter"]
+    },
+    "verifiable": {
+      "label_cn": "可验证",
+      "label_en": "Verifiable",
+      "weight": 0.25,
+      "min_positive": 2,
+      "positive_signals": ["测试", "test", "example", "示例", "预期", "expected", "demo", "result", "结果", "用例", "样例"],
+      "negative_signals": [],
+      "check_items": ["有测试用例或示例", "定义预期输出", "Demo 展示真实结果", "成败标准清晰"]
+    },
+    "clear_io": {
+      "label_cn": "IO 明确",
+      "label_en": "Clear I/O",
+      "weight": 0.25,
+      "min_positive": 1,
+      "positive_signals": ["输入", "输出", "input", "output", "→", "接受", "返回", "generates", "produces", "returns"],
+      "negative_signals": [],
+      "io_pattern": "输入.*输出|input.*output|接受.*返回|给定.*得到",
+      "check_items": ["'输入X，输出Y' 一句话描述", "输入类型/格式明确", "输出类型/格式明确", "注明边界/异常输入"]
+    }
+  },
+  "scoring": {
+    "completeness": {
+      "full": "5/5 文件齐全",
+      "partial": "3-4/5 文件齐全",
+      "insufficient": "<3 文件齐全"
+    },
+    "quality_per_criterion": {
+      "pass": "✅ 达标（正向信号命中≥min_positive 且无负面信号）",
+      "partial": "⚠️ 部分达标（有正向信号但不足，或存在负面信号）",
+      "fail": "❌ 未达标（无正向信号）"
+    },
+    "composite": {
+      "formula": "completeness_score * 0.4 + quality_score * 0.6",
+      "completeness_score": "files_present / 5.0",
+      "quality_score": "sum(criterion_scores) / 4.0  其中 ✅=1.0、⚠️=0.5、❌=0.0"
+    }
+  }
+}
