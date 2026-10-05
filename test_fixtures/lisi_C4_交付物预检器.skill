@@ -1,0 +1,9 @@
+---
+name: file-classifier
+description: 按作者归类提交文件
+---
+
+# workflow
+1. scan folder
+2. extract author from filename
+3. group by author
